@@ -5,18 +5,19 @@
     "logo": "https://github.com/charisTheo/gif2video/raw/cb36f15f7385ca7b41ec2727b275195d29e1d62b/public/app_icons/icon-512x512.png",
     "keywords": ["node", "express", "ffmpeg", "gif", "video"],
     "buildpacks": [
-        { "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git" }
+        { "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git" },
+        { "url": "https://github.com/heroku/heroku-buildpack-nodejs.git" }
     ],
     "env": {
+        "CLIENT_ORIGIN": {
+            "description": "If domain protection is enabled in the previous prompt, insert here the domain to which the API will listen to.",
+            "value": "http://localhost:5000",
+            "required": false
+        },
         "DOMAIN_PROTECTED": {
             "description": "Configure whether your API will be domain protected. 1 = protected, 0 = unprotected.",
             "value": "1",
             "required": true
-        },
-        "CLIENT_ORIGIN": {
-            "description": "If chosen protected in the previous prompt, add here the domain to which the API will listen to.",
-            "value": "http://localhost:5000",
-            "required": false
         }
     },
     "image": "heroku/nodejs",
