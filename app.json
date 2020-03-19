@@ -1,0 +1,24 @@
+{
+    "name": "Gif2Video",
+    "description": "A GIF to web video converter API",
+    "repository": "https://github.com/charisTheo/node-gif2video",
+    "logo": "https://github.com/charisTheo/gif2video/raw/cb36f15f7385ca7b41ec2727b275195d29e1d62b/public/app_icons/icon-512x512.png",
+    "keywords": ["node", "express", "ffmpeg", "gif", "video"],
+    "buildpacks": [
+        { "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git" }
+    ],
+    "env": {
+        "DOMAIN_PROTECTED": {
+            "description": "Configure whether your API will be domain protected. 1 = protected, 0 = unprotected.",
+            "value": "1",
+            "required": true
+        },
+        "CLIENT_ORIGIN": {
+            "description": "If chosen protected in the previous prompt, add here the domain to which the API will listen to.",
+            "value": "http://localhost:5000",
+            "required": false
+        }
+    },
+    "image": "heroku/nodejs",
+    "website": "https://gif2video.com/"
+}

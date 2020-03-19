@@ -6,11 +6,11 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 
 const routes = require('./routes/routes'); 
+const UPLOAD_FOLDER = "media/";
 
 const { 
     PORT = 3000,
     NODE_ENV,
-    UPLOAD_FOLDER,
     CLIENT_ORIGIN,
     DEV_CLIENT_ORIGIN,
     DOMAIN_PROTECTED
