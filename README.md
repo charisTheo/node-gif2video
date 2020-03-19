@@ -1,1 +1,1 @@
-# gif2video
+# node-gif2video

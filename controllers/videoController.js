@@ -1,39 +1,24 @@
-exports.gif2mp4 = async (req, res) => {
-    try {
+const { convertGIFToAllWebTypes } = require('./../util/videoUtil');
 
-        res.status(200).send(converted);
+module.exports.convertGIF = async (req, res) => {
+    try {
+        // const { type } = req.params;
+        const { file } = req;
+        if (!file) {
+            throw new Error();
+        }
+        
+        const outputVideosPromises = await convertGIFToAllWebTypes(file);
+        const outputVideos = await Promise.all(outputVideosPromises);
+
+        res.status(200).send(outputVideos);
 
     } catch (error) {
-        console.log("videoController.gif2mp4 -> error", error);
+        console.log("videoController.convertGIF -> error", error);
         res.status(400).send();
 
     }
 };
-
-exports.gif2webm = async (req, res) => {
-    try {
-
-        res.status(200).send(converted);
-
-    } catch (error) {
-        console.log("videoController.gif2webm -> error", error);
-        res.status(400).send();
-
-    }
-};
-
-exports.gif2ogg = async (req, res) => {
-    try {
-
-        res.status(200).send(converted);
-
-    } catch (error) {
-        console.log("videoController.gif2ogg -> error", error);
-        res.status(400).send();
-
-    }
-};
-
 
 
 

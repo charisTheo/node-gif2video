@@ -1,2 +1,5 @@
 node_modules/
 models/
+media/*
+.env
+.DS_Store
