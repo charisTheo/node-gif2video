@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const { convertGIFToAllWebTypes } = require('./../util/videoUtil');
 
 module.exports.convertGIF = async (req, res) => {
@@ -12,6 +14,11 @@ module.exports.convertGIF = async (req, res) => {
         const outputVideos = await Promise.all(outputVideosPromises);
 
         res.status(200).send(outputVideos);
+
+        // delete input file
+        fs.unlink(file.path, () => {
+            console.log("POST /convert-gif: Deleted input file", file.path);
+        });
 
     } catch (error) {
         console.log("videoController.convertGIF -> error", error);
