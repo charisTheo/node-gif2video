@@ -26,37 +26,22 @@ const getOutputFilePathFromInput = (inputFilePath, outputType) => {
     });
 };
 
-// const getHashFromFile = file => {
-//     return new Promise((resolve, reject) => {
-//         var md5sum = crypto.createHash('md5');
-//         var stream = fs.ReadStream(path.join(__dirname, `../media/${filename}.${filetype}`));
-//         stream.on('data', data => md5sum.update(data));
+const formatBytes = (bytes, decimals = 2) => {
+    if (bytes === 0) return '0 Bytes';
 
-//         stream.on('end', () => {
-//             var hash = md5sum.digest('hex');
-//             resolve(path.join(__dirname, `../media/output-${hash}.${outputType}`));
-//         });
-//     });
-// };
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
-/**
- * 
- * @param {String} filepath - The full path to the file
- */
-const getFilesizeInKiloBytes = filepath => {
-    const stats = fs.statSync(filepath);
-    const fileSizeInBytes = stats["size"];
-    const fileSizeInKiloBytes = bytesToKiloBytes(fileSizeInBytes);
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-    return fileSizeInKiloBytes;
-};
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
 
-const bytesToKiloBytes = bytes => ((bytes / (1024 * 1024)).toFixed(2));
+// const bytesToKiloBytes = bytes => ((bytes / (1024 * 1024)).toFixed(2));
 
 module.exports = {
     getInputFilePath,
     getOutputFilePathFromInput,
-    getFilesizeInKiloBytes,
-    bytesToKiloBytes,
-    // getHashFromFile
+    formatBytes
 }

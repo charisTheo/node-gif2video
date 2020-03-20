@@ -6,8 +6,7 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 
 const {
     getOutputFilePathFromInput,
-    getFilesizeInKiloBytes,
-    bytesToKiloBytes
+    formatBytes
 } = require('./fileUtil');
 
 const outputs = [
@@ -39,11 +38,13 @@ module.exports.convertGIFToAllWebTypes = (inputFile) => {
                 const command = ffmpeg(inputFile.path)
                     .output(outputFilePath)
                     .on('end', function() {
-                        console.log(`Converted to ${output.type} ⚙️  Output filename: ${outputFilePath.match(/(?:\/media).*/g)}`);
+                        console.log(`\n⚙️ Converted to ${output.type} - Output file path: ${outputFilePath.match(/(?:\/media).*/g)}`);
                         
-                        const inputFileSize = bytesToKiloBytes(inputFile.size);
-                        const outputFileSize = getFilesizeInKiloBytes(outputFilePath);
-                        console.log(`convertGIFToAllWebTypes: ${output.type} -> Input: ${inputFileSize}KB | Output: ${outputFileSize}KB`)
+                        const inputFileSize = formatBytes(inputFile.size);
+                        const stats = fs.statSync(outputFilePath);
+                        const fileSizeInBytes = stats["size"];
+                        const outputFileSize = formatBytes(fileSizeInBytes);
+                        console.log(`🚀 ${output.type} -> Input: ${inputFileSize} | Output: ${outputFileSize}\n`)
 
                         fs.readFile(outputFilePath, (err, convertedFile) => {
                             if (err) {
@@ -53,15 +54,15 @@ module.exports.convertGIFToAllWebTypes = (inputFile) => {
                             setTimeout(() => {
                                 // delete file
                                 fs.unlink(outputFilePath, () => {
-                                    console.log("convertGIFToAllWebTypes: Deleted ", outputFilePath);
+                                    console.log("❌ Deleted ", outputFilePath);
                                 });
 
                             }, 2000);
 
                             resolve({
                                 ...output, // type, mime
-                                inputSizeKB: inputFileSize,
-                                outputFileSizeKB: outputFileSize,
+                                inputFileSize,
+                                outputFileSize,
                                 convertedFile
                             });
                         });

@@ -17,11 +17,11 @@ module.exports.convertGIF = async (req, res) => {
 
         // delete input file
         fs.unlink(file.path, () => {
-            console.log("POST /convert-gif: Deleted input file", file.path);
+            console.log("❌ Deleted input file", file.path);
         });
 
     } catch (error) {
-        console.log("videoController.convertGIF -> error", error);
+        console.log("\n⛔️ videoController.convertGIF -> error", error);
         res.status(400).send();
 
     }
