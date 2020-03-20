@@ -42,8 +42,8 @@ module.exports.convertGIFToAllWebTypes = (inputFile) => {
                         
                         const inputFileSize = formatBytes(inputFile.size);
                         const stats = fs.statSync(outputFilePath);
-                        const fileSizeInBytes = stats["size"];
-                        const outputFileSize = formatBytes(fileSizeInBytes);
+                        const outputFileSizeBytes = stats["size"];
+                        const outputFileSize = formatBytes(outputFileSizeBytes);
                         console.log(`🚀 ${output.type} -> Input: ${inputFileSize} | Output: ${outputFileSize}\n`)
 
                         fs.readFile(outputFilePath, (err, convertedFile) => {
@@ -61,7 +61,9 @@ module.exports.convertGIFToAllWebTypes = (inputFile) => {
 
                             resolve({
                                 ...output, // type, mime
+                                inputFileSizeBytes: inputFile.size,
                                 inputFileSize,
+                                outputFileSizeBytes,
                                 outputFileSize,
                                 convertedFile
                             });
