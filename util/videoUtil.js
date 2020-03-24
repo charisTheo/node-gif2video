@@ -4,38 +4,32 @@ const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
 
+// ffmpeg.getAvailableEncoders(function(err, encoders) {
+//     console.log('Available encoders:');
+//     console.dir(encoders);
+// });
+
 const {
     getOutputFilePathFromInput,
+    getOutputTypesToConvert,
+    deleteFile,
     formatBytes
 } = require('./fileUtil');
 
-const outputs = [
-    {
-        type: 'webm',
-        mime: 'video/webm'
-    }, 
-    {
-        type: 'ogg',
-        mime: 'video/ogg'
-    }, 
-    {
-        type: 'mp4',
-        mime: 'video/mp4'
-    }, 
-    {
-        type: 'mov',
-        mime: 'video/quicktime'
-    }
-];
+// const DEFAULT_VIDEO_CODEC = 'libx264';
+const DEFAULT_VIDEO_BITRATE = '1000k'; // target video bitrate in kbps
 
-module.exports.convertGIFToAllWebTypes = (inputFile) => {
+module.exports.convertFileToAllWebTypes = inputFile => {
     return new Promise(async (resolve, reject) => {
+        const outputTypesToConvert = getOutputTypesToConvert(inputFile.fieldname);
 
-        const outputVideosPromises = outputs.map(output => {
+        const outputVideosPromises = outputTypesToConvert.map(output => {
             return new Promise(async (resolve, reject) => {
                 const outputFilePath = await getOutputFilePathFromInput(inputFile.path, output.type);
                 
                 const command = ffmpeg(inputFile.path)
+                    // .videoCodec(DEFAULT_VIDEO_CODEC)
+                    .videoBitrate(DEFAULT_VIDEO_BITRATE)
                     .output(outputFilePath)
                     .on('end', function() {
                         console.log(`\n⚙️ Converted to ${output.type} - Output file path: ${outputFilePath.match(/(?:\/media).*/g)}`);
@@ -51,16 +45,10 @@ module.exports.convertGIFToAllWebTypes = (inputFile) => {
                                 throw err;
                             }
                             
-                            setTimeout(() => {
-                                // delete file
-                                fs.unlink(outputFilePath, () => {
-                                    console.log("❌ Deleted ", outputFilePath);
-                                });
-
-                            }, 2000);
+                            deleteFile(outputFilePath);
 
                             resolve({
-                                ...output, // type, mime
+                                ...output, // { type, mime }
                                 inputFileSizeBytes: inputFile.size,
                                 inputFileSize,
                                 outputFileSizeBytes,
@@ -79,4 +67,4 @@ module.exports.convertGIFToAllWebTypes = (inputFile) => {
 
         resolve(outputVideosPromises);
     })
-}
+};

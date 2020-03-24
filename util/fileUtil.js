@@ -2,6 +2,25 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
+const VIDEO_OUTPUT_TYPES = [
+    {
+        type: 'webm',
+        mime: 'video/webm'
+    }, 
+    {
+        type: 'ogg',
+        mime: 'video/ogg'
+    }, 
+    {
+        type: 'mp4',
+        mime: 'video/mp4'
+    }, 
+    {
+        type: 'mov',
+        mime: 'video/quicktime'
+    }
+];
+
 const getInputFilePath = (fileName, fileType) => {
     return new Promise((resolve, reject) => {        
         resolve(path.join(__dirname, `../media/${fileName}.${fileType}`));
@@ -40,8 +59,29 @@ const formatBytes = (bytes, decimals = 2) => {
 
 // const bytesToKiloBytes = bytes => ((bytes / (1024 * 1024)).toFixed(2));
 
+const getOutputTypesToConvert = inputFileType => {
+    return VIDEO_OUTPUT_TYPES.reduce((prev, curr) => {
+        if (curr.type === inputFileType) {
+            return prev;
+        }
+        return [...prev, curr];
+    }, []);
+}
+
+const deleteFile = filePath => {
+    setTimeout(() => {
+        // delete file
+        fs.unlink(filePath, () => {
+            console.log("❌ Deleted ", filePath);
+        });
+
+    }, 2000);
+}
+
 module.exports = {
     getInputFilePath,
     getOutputFilePathFromInput,
+    getOutputTypesToConvert,
+    deleteFile,
     formatBytes
 }
