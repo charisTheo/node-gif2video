@@ -1,13 +1,13 @@
 const multer = require('multer');
 const path = require('path');
 
-const UPLOAD_FOLDER = "media/";
+const UPLOAD_FOLDER = path.join(__dirname, "../media/");
 const FILE_SIZE_LIMIT_BYTES = 5 * 1024 * 1024; // 5 MB
 const ACCEPTABLE_FILE_TYPES = ['gif', 'mp4'];
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, UPLOAD_FOLDER));
+        cb(null, UPLOAD_FOLDER);
     },
     filename: function (req, file, cb) {
         // TODO create hash based on file
