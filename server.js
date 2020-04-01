@@ -7,7 +7,7 @@ const routes = require('./routes/routes');
 const { upload } = require('./middleware/multer');
 
 const { 
-    PORT = 3000,
+    PORT,
     NODE_ENV,
     CLIENT_ORIGIN,
     DEV_CLIENT_ORIGIN,
