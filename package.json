@@ -2,11 +2,14 @@
   "name": "gif2video",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./server.js",
   "scripts": {
     "start": "node ./server.js",
-    "dev": "rm -f media/* && NODE_ENV=dev nodemon server.js || true",
+    "dev": "NODE_ENV=dev nodemon server.js || true",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "12.11.1"
   },
   "repository": {
     "type": "git",
