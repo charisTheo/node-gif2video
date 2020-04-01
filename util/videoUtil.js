@@ -29,6 +29,7 @@ module.exports.convertFileToAllWebTypes = inputFile => {
                 
                 const command = ffmpeg(inputFile.path)
                     // .videoCodec(DEFAULT_VIDEO_CODEC)
+                    .noAudio()
                     .videoBitrate(DEFAULT_VIDEO_BITRATE)
                     .output(outputFilePath)
                     .on('end', function() {

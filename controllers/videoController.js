@@ -5,9 +5,9 @@ const { convertFileToAllWebTypes } = require('./../util/videoUtil');
 module.exports.convertFile = async (req, res) => {
     try {
         const { fileType } = req.params;
-        console.log("videoController.convertFile -> fileType", fileType)
         const { files } = req;
-        if (!files.length) {
+        
+        if (!files || !files.length) {
             throw new Error("videoController.convertFile: No files were found!");
         }
         const file = files[0];
