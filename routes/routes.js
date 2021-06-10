@@ -12,4 +12,9 @@ module.exports = (app) => {
       origin: DOMAIN_PROTECTED === '1' ? CLIENT_ORIGIN : '*'
     }), videoController.convertFile);
 
+  app.route('/optimise-gif')
+    .post(cors({
+      origin: DOMAIN_PROTECTED === '1' ? CLIENT_ORIGIN : '*'
+    }), videoController.handleOptimiseGif);
+
 };

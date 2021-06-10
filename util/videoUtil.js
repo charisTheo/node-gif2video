@@ -69,3 +69,42 @@ module.exports.convertFileToAllWebTypes = inputFile => {
         resolve(outputVideosPromises);
     })
 };
+
+module.exports.optimiseGif = async inputFile => {
+    return new Promise(async (resolve, reject) => {
+        const outputFilePath = await getOutputFilePathFromInput(inputFile.path, 'gif');
+        
+        const command = ffmpeg(inputFile.path)
+            // .videoCodec(DEFAULT_VIDEO_CODEC)
+            .videoBitrate(DEFAULT_VIDEO_BITRATE)
+            .output(outputFilePath)
+            .on('end', function() {
+                console.log(`\n⚙️ Finished optimising GIF - Output file path: ${outputFilePath.match(/(?:\/media).*/g)}`);
+                
+                const inputFileSize = formatBytes(inputFile.size);
+                const stats = fs.statSync(outputFilePath);
+                const outputFileSizeBytes = stats["size"];
+                const outputFileSize = formatBytes(outputFileSizeBytes);
+                console.log(`🚀 Optimisation -> Input: ${inputFileSize} | Output: ${outputFileSize}\n`)
+
+                fs.readFile(outputFilePath, (err, convertedFile) => {
+                    if (err) {
+                        throw err;
+                    }
+                    
+                    deleteFile(outputFilePath);
+
+                    resolve({
+                        type: 'gif',
+                        mime: 'image/gif',
+                        inputFileSizeBytes: inputFile.size,
+                        inputFileSize,
+                        outputFileSizeBytes,
+                        outputFileSize,
+                        convertedFile
+                    });
+                });
+            })
+            .run()
+    })
+}
